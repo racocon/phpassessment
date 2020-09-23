@@ -1,0 +1,36 @@
+$sql = "INSERT INTO products(product_code,
+							 sku,
+							 barcode_1,
+							 description,
+							 put_method,
+							 inv_xdock,
+							 storage_type)
+		VALUES ('$var1',
+				'$var1',
+				'$var2',
+				'$var3',
+				'$var4',
+				'$var5',
+				'$var6');";
+
+$sql = "SELECT *
+		FROM users
+		WHERE user_pw = md5('$var1')
+		AND user_type = 'ADMIN';";
+
+$sql = "DELETE FROM products
+		WHERE sku = '$var1';";
+
+$sql = "SELECT *
+		FROM products
+		WHERE sku = '$var1';";
+
+$sql = "UPDATE products
+		SET barcode = '$var1',
+			description = '$var2',
+			put_method = '$var3',
+			inv_xdock = '$var4',
+			stoarge_type = '$var5
+		WHERE sku = '$var6';";
+
+$query = pg_query($sql);
