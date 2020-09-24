@@ -48,7 +48,7 @@
         $sku = $_POST['del-id'];
 
         $sql_delete_product = "DELETE FROM products 
-                                WHERE sku='del-id';";
+                                WHERE sku='$sku';";
         
         $query_delete_product = pg_query($sql_delete_product);
     }
