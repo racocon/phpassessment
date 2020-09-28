@@ -125,7 +125,15 @@ if (isset($_POST['edit_data'])) {
     <div class="container" style="width:700px;">
         <div class="table-responsive">
             <div id="datatable">
-                <input type="button" name="create" id="create" value="Add Product" class="btn btn-info btn-m add_data" data-toggle="modal" data-target="#modal_view_edit">
+                <input 
+                    type="button" 
+                    name="create" 
+                    id="create" 
+                    value="Add Product" 
+                    class="btn btn-info btn-m add_data" 
+                    onclick="Add()" 
+                    data-toggle="modal" 
+                    data-target="#modal_view_edit">
                 <br><br>
                 <table class="table table-bordered" id="dbTableData">
                     <thead>
@@ -167,6 +175,7 @@ if (isset($_POST['edit_data'])) {
                                     data-invxdock-id="<?php echo $inv_xdock; ?>"  
                                     data-storagetype-id="<?php echo $storage_type; ?>"  
                                     class="btn btn-info btn-xs edit_data" 
+                                    onclick="Edit()" 
                                     data-toggle="modal" 
                                     data-target="#modal_view_edit"></td>
                             <td><input 
@@ -243,7 +252,7 @@ if (isset($_POST['edit_data'])) {
                     </table>
                     <br><br>
                     <input type="submit" name="add_data" id="submit_btn" value="Submit" class="btn btn-success">
-                    <!-- <input type="submit" name="edit_data" id="edit_btn" value="Update" class="btn btn-warning"> -->
+                    <input type="submit" name="edit_data" id="edit_btn" value="Update" class="btn btn-warning">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -282,22 +291,30 @@ if (isset($_POST['edit_data'])) {
         $('#modal_delete').modal('show');
     });
 
-    // Pass edit ID to modal
-    $(document).on("click", ".edit_data", function() {
-        var ids = $(this).attr('data-edit-id');
-        var sku = $(this).attr('data-sku-id');
-        var barcode = $(this).attr('data-barcode-id');
-        var description = $(this).attr('data-description-id');
-        var put_method = $(this).attr('data-putmethod-id');
-        var inv_xdock = $(this).attr('data-invxdock-id');
-        var storage_type = $(this).attr('data-storagetype-id');
-        $("#edit-id").val(ids);
-        $("#sku").val(sku);
-        $("#barcode_1").val(barcode);
-        $("#description").val(description);
-        $("#put_method").val(put_method);
-        $("#inv_xdock").val(inv_xdock);
-        $("#storage_type").val(storage_type);
-        $('#modal_view_edit').modal('show');
-    });
+    function Add(){
+        document.getElementById("edit_btn").style.visibility="hidden";
+    }
+
+    function Edit(){
+        document.getElementById("submit_btn").style.visibility="hidden";
+
+        // Pass edit ID to modal
+        $(document).on("click", ".edit_data", function () {
+            var ids = $(this).attr('data-edit-id');
+            var sku = $(this).attr('data-sku-id');
+            var barcode = $(this).attr('data-barcode-id');
+            var description = $(this).attr('data-description-id');
+            var put_method = $(this).attr('data-putmethod-id');
+            var inv_xdock = $(this).attr('data-invxdock-id');
+            var storage_type = $(this).attr('data-storagetype-id');
+            $("#edit-id").val(ids);
+            $("#sku").val(sku);
+            $("#barcode_1").val(barcode);
+            $("#description").val(description);
+            $("#put_method").val(put_method);
+            $("#inv_xdock").val(inv_xdock);
+            $("#storage_type").val(storage_type);
+
+        });
+    }
 </script>
