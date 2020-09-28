@@ -40,17 +40,33 @@
 
         $query_insert_products = pg_query($sql_insert_products);
 
+        echo $sku . ' item added.';
+
     }
 
     // Delete product from table
-    if (isset($_POST['delete_data'])) 
+    if (isset($_POST['password'])) 
     {
+        $user_pw = $_POST['password'];
         $sku = $_POST['del-id'];
 
-        $sql_delete_product = "DELETE FROM products 
-                                WHERE sku='$sku';";
-        
-        $query_delete_product = pg_query($sql_delete_product);
+        $sql_check_password = "SELECT *
+                                FROM users
+                                WHERE user_pw = md5('$user_pw')
+                                AND user_type = 'ADMIN';";
+
+        if ($sql_check_password = $user_pw) 
+        {
+            $sql_delete_product = "DELETE FROM products 
+            WHERE sku='$sku';";
+
+            $query_delete_product = pg_query($sql_delete_product);;
+
+            echo $sku . ' item deleted.';
+
+        } else {
+            echo 'Invalid password.';
+        }
     }
 
 ?>
