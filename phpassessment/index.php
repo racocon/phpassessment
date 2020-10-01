@@ -26,25 +26,36 @@ if (isset($_POST['add_data'])) {
     // Check if product already exists
     $sql_check_products = "SELECT *
                             FROM products
-                            WHERE sku = '$sku';";
+                            WHERE sku = '$sku'
+                            OR barcode_1 = '$barcode_1';";
 
-    // Insert products into table
-    $sql_insert_products = "INSERT INTO products(sku,
-        barcode_1,
-        description,
-        put_method,
-        inv_xdock,
-        storage_type)
-        VALUES ('$sku',
-        '$barcode_1',
-        '$description',
-        '$put_method',
-        '$inv_xdock',
-        '$storage_type');";
+    $query_check_products = pg_query($sql_check_products);
 
-    $query_insert_products = pg_query($sql_insert_products);
+    $query_products_results = pg_num_rows($query_check_products);
 
-    echo $sku . ' product added.';
+    if($query_products_results == 0) {
+        // Insert products into table
+        $sql_insert_products = "INSERT INTO products(sku,
+            barcode_1,
+            description,
+            put_method,
+            inv_xdock,
+            storage_type)
+            VALUES ('$sku',
+            '$barcode_1',
+            '$description',
+            '$put_method',
+            '$inv_xdock',
+            '$storage_type');";
+
+        $query_insert_products = pg_query($sql_insert_products);
+
+        // Alert popup notifying product has been added
+        echo '<script type="text/javascript">alert("Product ' . $sku . ' added.")</script>';
+    } else {
+        // If product already exists, alert error
+        echo '<script type="text/javascript">alert("Product ' . $sku . ' already exists!")</script>';
+    }
 }
 
 // Delete product from table
@@ -58,16 +69,21 @@ if (isset($_POST['password'])) {
                             WHERE user_pw = md5('$user_pw')
                             AND user_type = 'ADMIN';";
 
-    if ($sql_check_password = $user_pw) {
+    $query_check_password = pg_query($sql_check_password);
+
+    $query_password_results = pg_num_rows($query_check_password);
+
+    if ($query_password_results != 0) {
         // If password matches, delete row from db
         $sql_delete_product = "DELETE FROM products 
             WHERE sku='$sku';";
 
         $query_delete_product = pg_query($sql_delete_product);;
 
-        echo $sku . ' product deleted.';
+        // Alert popup notifying product has been deleted
+        echo '<script type="text/javascript">alert("Product ' . $sku . ' deleted.")</script>';
     } else {
-        echo 'Invalid password.';
+        echo '<script type="text/javascript">alert("Invalid password")</script>';
     }
 }
 
@@ -81,28 +97,19 @@ if (isset($_POST['edit_data'])) {
     $inv_xdock = $_POST['inv_xdock'];
     $storage_type = $_POST['storage_type'];
 
-    // Check if product already exists
-    $sql_check_products = "SELECT *
-                            FROM products
-                            WHERE sku = '$sku';";
+    // Update product in table
+    $sql_update_products = "UPDATE products
+    SET barcode_1 = '$barcode_1',
+    description = '$description',
+    put_method = '$put_method',
+    inv_xdock = '$inv_xdock',
+    storage_type = '$storage_type'
+    WHERE sku = '$sku';";
 
-    if($sql_check_products = $sku) {
-   
-        // Update product in table
-        $sql_update_products = "UPDATE products
-            SET barcode_1 = '$barcode_1',
-            description = '$description',
-            put_method = '$put_method',
-            inv_xdock = '$inv_xdock',
-            storage_type = '$storage_type'
-            WHERE sku = '$sku';";
+    $query_update_products = pg_query($sql_update_products);
 
-        $query_update_products = pg_query($sql_update_products);
-
-        echo $sku . ' product edited.';
-    } else {
-        echo 'Error editing product.';
-    }
+    // Alert popup notifying product has been updated
+    echo '<script type="text/javascript">alert("Product ' . $sku . ' updated.")</script>';
 }
 
 ?>
